@@ -24,6 +24,7 @@ class SSOController extends Controller
 
         return redirect(config("auth.sso_host") .  "/oauth/authorize?" . $query);
     }
+
     public function getCallback(Request $request)
     {
         $state = $request->session()->pull("state");
@@ -41,7 +42,7 @@ class SSOController extends Controller
             ]
         );
         $request->session()->put($response->json());
-        return redirect(route("sso.connect"));
+        return $response->json();
     }
     public function connectUser(Request $request)
     {
@@ -49,7 +50,7 @@ class SSOController extends Controller
         $response = Http::withHeaders([
             "Accept" => "application/json",
             "Authorization" => "Bearer " . $access_token
-        ])->get(config("auth.sso_host") .  "/api/user");
+        ])->get(config("auth.sso_host") .  "/api/v1/me");
         $userArray = $response->json();
         return response()->json($userArray);
         try {

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\SSOController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+Route::middleware(['api'])->group(function () {
+    Route::get("/duithape/authorize", [SSOController::class, 'authorizeClient']);
+    Route::get("/duithape/get-token", [SSOController::class, 'getToken']);
+    Route::get("/duithape/get-user", [SSOController::class, 'getUser']);
 });
